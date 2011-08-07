@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import ru.iteco.client.model.Folder;
 import ru.iteco.client.model.Registry;
 import ru.iteco.shared.ClientTypeEnum;
 import ru.iteco.shared.StatusEnum;
@@ -12,7 +13,9 @@ import ru.iteco.shared.TypeEnum;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Scroll;
+import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.store.ListStore;
+import com.extjs.gxt.ui.client.store.TreeStore;
 import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
@@ -29,6 +32,7 @@ import com.extjs.gxt.ui.client.widget.grid.Grid;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
 import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
+import com.extjs.gxt.ui.client.widget.treepanel.TreePanel;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.ListBox;
@@ -75,6 +79,13 @@ public class MainContainer extends LayoutContainer {
 	private ContentPanel createWest() {
 		ContentPanel west = new ContentPanel();
 		west.setHeading("Основное меню");
+		Folder model = RootMenu.getRootMenu();
+		TreeStore<ModelData> store = new TreeStore<ModelData>();
+		store.add(model.getChildren(), true);
+		TreePanel<ModelData> tree = new TreePanel<ModelData>(store);
+		tree.setDisplayProperty("name");
+		tree.setWidth(250);
+		west.add(tree);
 		return west;
 	}
 
@@ -90,7 +101,7 @@ public class MainContainer extends LayoutContainer {
 		}
 		return center;
 	}
-	
+
 	private List<VerticalPanel> getVerticalPanels() {
 		List<VerticalPanel> vpList = new ArrayList<VerticalPanel>();
 
@@ -364,5 +375,5 @@ public class MainContainer extends LayoutContainer {
 		configs.add(column);
 		return configs;
 	}
-	
+
 }

@@ -8,7 +8,7 @@
   <!-- Servlets -->
   <servlet>
     <servlet-name>greetServlet</servlet-name>
-    <servlet-class>ru.iteco.server.GreetingServiceImpl</servlet-class>
+    <servlet-class>ru.iteco.server.RegistryServiceImpl</servlet-class>
   </servlet>
   
   <servlet-mapping>

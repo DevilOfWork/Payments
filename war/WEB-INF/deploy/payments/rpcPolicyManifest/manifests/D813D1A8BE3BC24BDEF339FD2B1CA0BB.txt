@@ -1,2 +1,2 @@
-serviceClass: ru.iteco.client.GreetingService
+serviceClass: ru.iteco.client.RegistryService
 path: 2E80063358E0D00A735EC6FB5B648575.gwt.rpc

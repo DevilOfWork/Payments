@@ -7,4 +7,4 @@ java.lang.NumberFormatException, true, true, false, false, java.lang.NumberForma
 java.lang.RuntimeException, true, false, true, false, java.lang.RuntimeException/515124647, 515124647
 java.lang.String, true, true, true, true, java.lang.String/2004016611, 2004016611
 java.lang.Throwable, true, false, true, false, java.lang.Throwable/2953622131, 2953622131
-ru.iteco.client.GreetingService, false, false, false, false, _, 837633962
+ru.iteco.client.RegistryService, false, false, false, false, _, 837633962
