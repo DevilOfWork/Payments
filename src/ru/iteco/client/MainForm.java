@@ -55,7 +55,8 @@ public class MainForm extends LayoutContainer {
 	 */
 	private ContentPanel createWest() {
 		ContentPanel west = new ContentPanel();
-		west.setWidth(200);
+		//west.setWidth(200);
+		west.setAutoWidth(true);
 		west.setHeading("Основное меню");
 		Folder model = RootMenu.getRootMenu();
 		TreeStore<ModelData> store = new TreeStore<ModelData>();
@@ -69,7 +70,7 @@ public class MainForm extends LayoutContainer {
 		TreePanel<ModelData> tree = new TreePanel<ModelData>(store);
 		tree.setDisplayProperty("name");
 		//tree.setAutoWidth(true);
-		tree.setSize(300, 400);
+		tree.setSize(250, 400);
 		west.add(tree);
 		return west;
 	}
@@ -78,7 +79,8 @@ public class MainForm extends LayoutContainer {
 	 * Создаем центр
 	 */
 	private ContentPanel createCenter() {
-		return new RegistryListForm().createCenter();
+		//return new RegistryListForm().createCenter();
+		return new SalaryProjectsForm().createCenter();
 	}
 
 }

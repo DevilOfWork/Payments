@@ -204,6 +204,12 @@ public class RegistryListForm {
 		hpList.add(hp2);
 
 		HorizontalPanel hp3 = getPagingInfo();
+		hp3.setWidth(1200);
+		Text fake = new Text();
+		fake.setWidth(480);
+		hp3.add(fake);
+		Text currentTime = new Text(DateTimeFormat.getFormat("dd.MM.yyyy HH:mm:ss").format(new Date()));
+		hp3.add(currentTime);
 		hpList.add(hp3);
 
 		HorizontalPanel hp4 = new HorizontalPanel();
