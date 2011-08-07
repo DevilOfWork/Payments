@@ -13,6 +13,6 @@ public class Payments implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		RootPanel.get().add(new MainContainer());
+		RootPanel.get().add(new MainForm());
 	}
 }

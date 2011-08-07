@@ -4,23 +4,16 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import ru.iteco.client.model.Folder;
 import ru.iteco.client.model.Registry;
 import ru.iteco.shared.ClientTypeEnum;
 import ru.iteco.shared.StatusEnum;
 import ru.iteco.shared.TypeEnum;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
-import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Scroll;
-import com.extjs.gxt.ui.client.data.BaseTreeModel;
-import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.store.ListStore;
-import com.extjs.gxt.ui.client.store.TreeStore;
-import com.extjs.gxt.ui.client.util.Margins;
 import com.extjs.gxt.ui.client.widget.ContentPanel;
 import com.extjs.gxt.ui.client.widget.HorizontalPanel;
-import com.extjs.gxt.ui.client.widget.LayoutContainer;
 import com.extjs.gxt.ui.client.widget.Text;
 import com.extjs.gxt.ui.client.widget.VerticalPanel;
 import com.extjs.gxt.ui.client.widget.button.Button;
@@ -30,79 +23,14 @@ import com.extjs.gxt.ui.client.widget.grid.CheckBoxSelectionModel;
 import com.extjs.gxt.ui.client.widget.grid.ColumnConfig;
 import com.extjs.gxt.ui.client.widget.grid.ColumnModel;
 import com.extjs.gxt.ui.client.widget.grid.Grid;
-import com.extjs.gxt.ui.client.widget.layout.BorderLayout;
-import com.extjs.gxt.ui.client.widget.layout.BorderLayoutData;
 import com.extjs.gxt.ui.client.widget.layout.FitLayout;
-import com.extjs.gxt.ui.client.widget.treepanel.TreePanel;
 import com.google.gwt.i18n.client.DateTimeFormat;
-import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.ui.Hyperlink;
 import com.google.gwt.user.client.ui.ListBox;
 
-public class MainContainer extends LayoutContainer {
+public class RegistryListForm {
 
-	protected void onRender(Element target, int index) {
-		super.onRender(target, index);
-		final BorderLayout layout = new BorderLayout();
-		setLayout(layout);
-		setStyleAttribute("padding", "10px");
-
-		BorderLayoutData northData = new BorderLayoutData(LayoutRegion.NORTH,
-				80);
-		northData.setCollapsible(true);
-		northData.setFloatable(true);
-		northData.setHideCollapseTool(true);
-		northData.setSplit(true);
-		northData.setMargins(new Margins(0, 0, 5, 0));
-
-		BorderLayoutData westData = new BorderLayoutData(LayoutRegion.WEST, 250);
-		westData.setSplit(true);
-		westData.setCollapsible(true);
-		westData.setMargins(new Margins(0, 5, 0, 0));
-
-		BorderLayoutData centerData = new BorderLayoutData(LayoutRegion.CENTER);
-		centerData.setMargins(new Margins(0));
-
-		add(createNorth(), northData);
-		add(createWest(), westData);
-		add(createCenter(), centerData);
-	}
-
-	/*
-	 * Создаем север
-	 */
-	private LayoutContainer createNorth() {
-		return new LayoutContainer();
-	}
-
-	/*
-	 * Создаем восток
-	 */
-	private ContentPanel createWest() {
-		ContentPanel west = new ContentPanel();
-		//west.setAutoWidth(true);
-		west.setWidth(200);
-		west.setHeading("Основное меню");
-		Folder model = RootMenu.getRootMenu();
-		TreeStore<ModelData> store = new TreeStore<ModelData>();
-		for (ModelData f : model.getChildren()) {
-			if (f instanceof Folder) {
-				store.add(((BaseTreeModel) f).getChildren(), true);
-			} else {
-				store.add(f, false);
-			}
-		}
-		TreePanel<ModelData> tree = new TreePanel<ModelData>(store);
-		tree.setDisplayProperty("name");
-		//tree.setAutoWidth(true);
-		tree.setSize(300, 400);
-		west.add(tree);
-		return west;
-	}
-
-	/*
-	 * Создаем центр
-	 */
-	private ContentPanel createCenter() {
+	public ContentPanel createCenter() {
 		ContentPanel center = new ContentPanel();
 		center.setHeaderVisible(false);
 		center.setScrollMode(Scroll.AUTOX);
@@ -135,6 +63,7 @@ public class MainContainer extends LayoutContainer {
 		vpList.add(vp2);
 
 		VerticalPanel vp3 = new VerticalPanel();
+		vp3.setWidth(90);
 		vp3.setSpacing(7);
 		vp3.add(new Text("Дата по"));
 		vp3.add(new Text("Сумма от и"));
@@ -158,6 +87,7 @@ public class MainContainer extends LayoutContainer {
 		vpList.add(vp4);
 
 		VerticalPanel vp5 = new VerticalPanel();
+		vp5.setWidth(100);
 		vp5.setSpacing(6);
 		vp5.add(new Text("№ договора"));
 		vp5.add(new Text("Имя файла"));
@@ -237,11 +167,9 @@ public class MainContainer extends LayoutContainer {
 		for (VerticalPanel vp : vpList) {
 			hp1.add(vp);
 		}
-
 		hpList.add(hp1);
 
 		HorizontalPanel hp2 = new HorizontalPanel();
-
 		VerticalPanel vp1 = new VerticalPanel();
 		vp1.setWidth(50);
 		Button find = new Button("Найти");
@@ -275,12 +203,7 @@ public class MainContainer extends LayoutContainer {
 		hp2.setHeight(40);
 		hpList.add(hp2);
 
-		HorizontalPanel hp3 = new HorizontalPanel();
-		Text paging = new Text(
-				"Найдено записей "
-						+ MockRegistriesTable.getMockData().size()
-						+ ", показано с 1 по 10. (В начало/предыдущая) 1,2 (Следующая/в конец)");
-		hp3.add(paging);
+		HorizontalPanel hp3 = getPagingInfo();
 		hpList.add(hp3);
 
 		HorizontalPanel hp4 = new HorizontalPanel();
@@ -288,12 +211,8 @@ public class MainContainer extends LayoutContainer {
 				getColumnConfigList()));
 		hpList.add(hp4);
 
-		HorizontalPanel hp5 = new HorizontalPanel();
+		HorizontalPanel hp5 = getPagingInfo();
 		hp5.setHeight(40);
-		hp5.add(new Text(
-				"Найдено записей "
-						+ MockRegistriesTable.getMockData().size()
-						+ ", показано с 1 по 10. (В начало/предыдущая) 1,2 (Следующая/в конец)"));
 		hpList.add(hp5);
 
 		HorizontalPanel hp6 = new HorizontalPanel();
@@ -334,6 +253,31 @@ public class MainContainer extends LayoutContainer {
 		return hpList;
 	}
 
+	private HorizontalPanel getPagingInfo() {
+		HorizontalPanel hp3 = new HorizontalPanel();
+		Text paging = new Text("Найдено записей "
+				+ MockRegistriesTable.getMockData().size()
+				+ ", показано с 1 по 10.");
+		paging.setWidth(300);
+		hp3.add(paging);
+		Hyperlink beginingLink = new Hyperlink();
+		beginingLink.setText("(В начало/");
+		hp3.add(beginingLink);
+		Hyperlink beforeLink = new Hyperlink();
+		beforeLink.setText("предыдущая)");
+		hp3.add(beforeLink);
+		Hyperlink pagesLink = new Hyperlink();
+		pagesLink.setText(" 1,2 ");
+		hp3.add(pagesLink);
+		Hyperlink nextLink = new Hyperlink();
+		nextLink.setText("(Следующая/");
+		hp3.add(nextLink);
+		Hyperlink lastLink = new Hyperlink();
+		lastLink.setText("в конец)");
+		hp3.add(lastLink);
+		return hp3;
+	}
+
 	private ContentPanel createMockTable(List<Registry> rList,
 			List<ColumnConfig> ccList) {
 		ContentPanel cp = new ContentPanel();
@@ -341,7 +285,7 @@ public class MainContainer extends LayoutContainer {
 		cp.setBodyBorder(false);
 		cp.setButtonAlign(HorizontalAlignment.CENTER);
 		cp.setLayout(new FitLayout());
-		cp.setSize(1110, 200);
+		cp.setSize(1200, 200);
 		ListStore<Registry> store = new ListStore<Registry>();
 		store.add(rList);
 		CheckBoxSelectionModel<Registry> sm = new CheckBoxSelectionModel<Registry>();
@@ -359,7 +303,6 @@ public class MainContainer extends LayoutContainer {
 
 	private List<ColumnConfig> getColumnConfigList() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
-
 		ColumnConfig column = new ColumnConfig("id", "ID", 20);
 		configs.add(column);
 		column = new ColumnConfig("contractNumber", "№ дог.", 100);
