@@ -13,6 +13,7 @@ import ru.iteco.shared.TypeEnum;
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
 import com.extjs.gxt.ui.client.Style.LayoutRegion;
 import com.extjs.gxt.ui.client.Style.Scroll;
+import com.extjs.gxt.ui.client.data.BaseTreeModel;
 import com.extjs.gxt.ui.client.data.ModelData;
 import com.extjs.gxt.ui.client.store.ListStore;
 import com.extjs.gxt.ui.client.store.TreeStore;
@@ -46,14 +47,14 @@ public class MainContainer extends LayoutContainer {
 		setStyleAttribute("padding", "10px");
 
 		BorderLayoutData northData = new BorderLayoutData(LayoutRegion.NORTH,
-				100);
+				80);
 		northData.setCollapsible(true);
 		northData.setFloatable(true);
 		northData.setHideCollapseTool(true);
 		northData.setSplit(true);
 		northData.setMargins(new Margins(0, 0, 5, 0));
 
-		BorderLayoutData westData = new BorderLayoutData(LayoutRegion.WEST, 150);
+		BorderLayoutData westData = new BorderLayoutData(LayoutRegion.WEST, 250);
 		westData.setSplit(true);
 		westData.setCollapsible(true);
 		westData.setMargins(new Margins(0, 5, 0, 0));
@@ -78,13 +79,22 @@ public class MainContainer extends LayoutContainer {
 	 */
 	private ContentPanel createWest() {
 		ContentPanel west = new ContentPanel();
+		//west.setAutoWidth(true);
+		west.setWidth(200);
 		west.setHeading("Основное меню");
 		Folder model = RootMenu.getRootMenu();
 		TreeStore<ModelData> store = new TreeStore<ModelData>();
-		store.add(model.getChildren(), true);
+		for (ModelData f : model.getChildren()) {
+			if (f instanceof Folder) {
+				store.add(((BaseTreeModel) f).getChildren(), true);
+			} else {
+				store.add(f, false);
+			}
+		}
 		TreePanel<ModelData> tree = new TreePanel<ModelData>(store);
 		tree.setDisplayProperty("name");
-		tree.setWidth(250);
+		//tree.setAutoWidth(true);
+		tree.setSize(300, 400);
 		west.add(tree);
 		return west;
 	}
@@ -331,7 +341,7 @@ public class MainContainer extends LayoutContainer {
 		cp.setBodyBorder(false);
 		cp.setButtonAlign(HorizontalAlignment.CENTER);
 		cp.setLayout(new FitLayout());
-		cp.setSize(1160, 200);
+		cp.setSize(1110, 200);
 		ListStore<Registry> store = new ListStore<Registry>();
 		store.add(rList);
 		CheckBoxSelectionModel<Registry> sm = new CheckBoxSelectionModel<Registry>();
@@ -350,7 +360,7 @@ public class MainContainer extends LayoutContainer {
 	private List<ColumnConfig> getColumnConfigList() {
 		List<ColumnConfig> configs = new ArrayList<ColumnConfig>();
 
-		ColumnConfig column = new ColumnConfig("id", "ID", 100);
+		ColumnConfig column = new ColumnConfig("id", "ID", 20);
 		configs.add(column);
 		column = new ColumnConfig("contractNumber", "№ дог.", 100);
 		configs.add(column);
